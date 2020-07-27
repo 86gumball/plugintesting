@@ -4,4 +4,7 @@ class PagesController < ApplicationController
 
   def all_users
   end
+
+  def redirect_test
+  end
 end

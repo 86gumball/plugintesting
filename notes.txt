@@ -1,0 +1,5 @@
+Clearance:
+Setup:
+1. rails generate clearance:
+2. rails db:migrate
+3. Setup routes: https://github.com/thoughtbot/clearance/blob/master/config/routes.rb
