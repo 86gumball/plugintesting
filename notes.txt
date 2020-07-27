@@ -58,3 +58,28 @@ Setup:
     User.create(username: "user001", email: "user001@test.com", password: "test001")
     User.create(username: "user002", email: "user002@test.com", password: "test002")
     User.create(username: "user003", email: "user003@test.com", password: "test003")
+
+9. Changing the mailer
+    9.1 Add this to config/environments/development.rb:
+        host = 'localhost:3000'
+        config.action_mailer.default_url_options = { host: host }
+
+        # SMTP settings for gmail
+        config.action_mailer.smtp_settings = {
+          :address              => "smtp.gmail.com",
+          :port                 => 587,
+          :user_name            => ENV["GMAIL_USERNAME"],
+          :password             => ENV["GMAIL_PASSWORD"],
+          :authentication       => "plain",
+          :enable_starttls_auto => true
+        }
+
+    9.2 Setting up gmail_username and gmail_password
+        Edit ~/.bashrc and add the following:
+            export GMAIL_USERNAME="my_mail_username" # DONT ADD @gmail.com
+            export GMAIL_PASSWORD="my_mail_username"
+
+    9.3 Allow unsecure apps on gmail (https://support.google.com/accounts/answer/6010255?hl=en)
+
+    9.4 (Optional) Edit email format
+        Edit the file: config/locales/clearance.en.yml
