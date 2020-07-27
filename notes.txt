@@ -1,5 +1,21 @@
 Clearance:
+
 Setup:
-1. rails generate clearance:
+1. rails generate clearance:install
 2. rails db:migrate
-3. Setup routes: https://github.com/thoughtbot/clearance/blob/master/config/routes.rb
+3. rails generate clearance:routes
+    3.1. Disable default routes, add this to config/initializers/clearance.rb:
+        - config.routes = false
+
+        If you don't you get this error: "Invalid route name, already in use: 'sign_in'  (ArgumentError)"
+        From clearance's github page: "As of Clearance 1.5 it is recommended that you disable Clearance routes and take
+        full control over routing and URL design. This ensures that your app's URL design won't be affected if the
+        gem's routes and URL design are changed.
+
+4. Disable signup
+    4.1. add this line to config/initializers/clearance.rb:
+            - config.allow_sign_up = false
+
+5. rails generate clearance:views # This shouldn't change the website, just make the views explicit instead of implicit
+
+Additional sign-in checks:
