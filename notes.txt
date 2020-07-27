@@ -18,4 +18,43 @@ Setup:
 
 5. rails generate clearance:views # This shouldn't change the website, just make the views explicit instead of implicit
 
-Additional sign-in checks:
+6. Add username to Users
+    6.1 rails generate migration AddUsernameToUsers username:string:index
+
+    6.2 Add unique: true to the migration file
+    Old:
+    class AddUsernameToUsers < ActiveRecord::Migration[6.0]
+      def change
+        add_column :users, :username, :string
+        add_index :users, :username
+      end
+    end
+
+    New:
+    class AddUsernameToUsers < ActiveRecord::Migration[6.0]
+      def change
+        add_column :users, :username, :string, null: false
+        add_index :users, :username, unique: true
+      end
+    end
+
+    6.3 Add model level validation:
+    class User < ApplicationRecord
+      include Clearance::User
+
+      validates :username, presence: true, uniqueness: true
+    end
+
+7. Create a Users controller and add user_params
+    class UsersController < Clearance::UsersController
+      private
+      def user_params
+        params.require(:user).permit(:username, :email, :password)
+      end
+    end
+
+8. Creating users using rails console
+    User.create(username: "user000", email: "user000@test.com", password: "test000")
+    User.create(username: "user001", email: "user001@test.com", password: "test001")
+    User.create(username: "user002", email: "user002@test.com", password: "test002")
+    User.create(username: "user003", email: "user003@test.com", password: "test003")
