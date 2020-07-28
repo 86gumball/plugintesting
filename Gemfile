@@ -6,6 +6,8 @@ ruby '2.7.1'
 # User Authentication
 gem 'clearance'
 
+gem 'irb'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.2'
 # Use postgresql as the database for Active Record

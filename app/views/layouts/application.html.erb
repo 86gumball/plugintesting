@@ -13,10 +13,10 @@
     <header>
       <%= link_to 'Home', '/' %>
       <% if signed_out? %>
-        <%= link_to 'Sign Up', sign_up_path %>
         <%= link_to 'Sign In', sign_in_path %>
       <% else %>
         <%= link_to 'all_users', pages_all_users_path %>
+        <%= link_to 'Change Password', user_password_path(current_user.id), method: :put %>
         <%= button_to 'Sign Out', sign_out_path, method: :delete %>
       <% end %>
     </header>

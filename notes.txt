@@ -1,5 +1,85 @@
 Clearance:
+
 Setup:
-1. rails generate clearance:
+1. rails generate clearance:install
 2. rails db:migrate
-3. Setup routes: https://github.com/thoughtbot/clearance/blob/master/config/routes.rb
+3. rails generate clearance:routes
+    3.1. Disable default routes, add this to config/initializers/clearance.rb:
+        - config.routes = false
+
+        If you don't you get this error: "Invalid route name, already in use: 'sign_in'  (ArgumentError)"
+        From clearance's github page: "As of Clearance 1.5 it is recommended that you disable Clearance routes and take
+        full control over routing and URL design. This ensures that your app's URL design won't be affected if the
+        gem's routes and URL design are changed.
+
+4. Disable signup
+    4.1. add this line to config/initializers/clearance.rb:
+            - config.allow_sign_up = false
+
+5. rails generate clearance:views # This shouldn't change the website, just make the views explicit instead of implicit
+
+6. Add username to Users
+    6.1 rails generate migration AddUsernameToUsers username:string:index
+
+    6.2 Add unique: true to the migration file
+    Old:
+    class AddUsernameToUsers < ActiveRecord::Migration[6.0]
+      def change
+        add_column :users, :username, :string
+        add_index :users, :username
+      end
+    end
+
+    New:
+    class AddUsernameToUsers < ActiveRecord::Migration[6.0]
+      def change
+        add_column :users, :username, :string, null: false
+        add_index :users, :username, unique: true
+      end
+    end
+
+    6.3 Add model level validation:
+    class User < ApplicationRecord
+      include Clearance::User
+
+      validates :username, presence: true, uniqueness: true
+    end
+
+7. Create a Users controller and add user_params
+    class UsersController < Clearance::UsersController
+      private
+      def user_params
+        params.require(:user).permit(:username, :email, :password)
+      end
+    end
+
+8. Creating users using rails console
+    User.create(username: "user000", email: "user000@test.com", password: "test000")
+    User.create(username: "user001", email: "user001@test.com", password: "test001")
+    User.create(username: "user002", email: "user002@test.com", password: "test002")
+    User.create(username: "user003", email: "user003@test.com", password: "test003")
+
+9. Changing the mailer
+    9.1 Add this to config/environments/development.rb:
+        host = 'localhost:3000'
+        config.action_mailer.default_url_options = { host: host }
+
+        # SMTP settings for gmail
+        config.action_mailer.smtp_settings = {
+          :address              => "smtp.gmail.com",
+          :port                 => 587,
+          :user_name            => ENV["GMAIL_USERNAME"],
+          :password             => ENV["GMAIL_PASSWORD"],
+          :authentication       => "plain",
+          :enable_starttls_auto => true
+        }
+
+    9.2 Setting up gmail_username and gmail_password
+        Edit ~/.bashrc and add the following:
+            export GMAIL_USERNAME="my_mail_username" # DONT ADD @gmail.com
+            export GMAIL_PASSWORD="my_mail_username"
+
+    9.3 Allow unsecure apps on gmail (https://support.google.com/accounts/answer/6010255?hl=en)
+
+    9.4 (Optional) Edit email format
+        Edit the file: config/locales/clearance.en.yml
