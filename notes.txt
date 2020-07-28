@@ -88,3 +88,48 @@ Setup:
 Pundit:
 
 (0. Setup the Posts, not very relevant to the pundit part)
+
+1. Add 'include Pundit' to application_controller.rb
+
+2. rails generate pundit:install
+
+3. rails generate pundit:policy post
+
+4. Add Acess Rules
+    class PostPolicy < ApplicationPolicy
+      def destroy?
+        user.admin?
+      end
+    end
+
+    (in posts_controller.rb)
+    def destroy
+      authorize @post
+      @post.destroy
+      redirect_to posts_url, notice: 'Post was successfully destroyed.'
+    end
+
+5. Rescue NotAuthorizedError's
+    (in application_controller.rb)
+
+    rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+    private
+    def user_not_authorized
+      flash[:warning] = "You are not authorized to perform this action."
+      redirect_to(request.referrer || root_path)
+    end
+
+6. Applying policies
+    <% if policy(post).destroy? %>
+      <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <% end %>
+
+    With this you can only have acess to 'Destroy' button if you pass the .destroy? method
+
+* Non-pundit: Seeding a database
+    20.times do |i|
+      Post.create({title: "Post #{i + 1}", body: 'test body', user_id: i > 10 ? 1 : 2})
+    end
+
+    Adding this do db/seed and running rake db:seed will generate 20 posts into the database
