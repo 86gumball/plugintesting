@@ -3,7 +3,7 @@ class User < ApplicationRecord
 
   validates :username, presence: true, uniqueness: true
 
-  has_many :posts
+  has_many :posts, dependent: :destroy
 
   def username
     self.email.split('@').first

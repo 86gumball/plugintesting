@@ -148,3 +148,10 @@ Pundit:
     def user_posts
       @posts = policy_scope(Post)
     end
+
+* Non-pundit: Making users deletable
+    Since a User `has_many :posts`, to make it destroyable its needed to change that line in models/user.rb to:
+
+    has_many :posts, dependent: :destroy
+
+    * when a user is deleted ALL posts of that user are deleted as well
