@@ -83,3 +83,8 @@ Setup:
 
     9.4 (Optional) Edit email format
         Edit the file: config/locales/clearance.en.yml
+
+
+Pundit:
+
+(0. Setup the Posts, not very relevant to the pundit part)
