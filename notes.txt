@@ -133,3 +133,18 @@ Pundit:
     end
 
     Adding this do db/seed and running rake db:seed will generate 20 posts into the database
+
+7. Making a Scope in PostPolicy
+    class PostPolicy < ApplicationPolicy
+      class Scope < Scope
+        def resolve
+          scope.where(user: user)
+        end
+      end
+      [...]
+    end
+
+    (in posts_controller.rb)
+    def user_posts
+      @posts = policy_scope(Post)
+    end
