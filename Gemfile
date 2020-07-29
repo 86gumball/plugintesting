@@ -6,6 +6,9 @@ ruby '2.7.1'
 # User Authentication
 gem 'clearance'
 
+# User Authorization
+gem 'pundit'
+
 gem 'irb'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
