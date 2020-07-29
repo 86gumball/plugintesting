@@ -9,10 +9,7 @@ RSpec.describe PostsController, type: :controller do
 
     let(:valid_session) { {} }
 
-    before :each do
-      usr = User.create(email: "user0@example.com", password: "123456", username: "user0")
-      sign_in_as(id: usr.id)
-    end
+    login_user
     # post = Post.create valid_attributes
 
     describe "GET #index" do
