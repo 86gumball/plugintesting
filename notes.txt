@@ -155,3 +155,8 @@ Pundit:
     has_many :posts, dependent: :destroy
 
     * when a user is deleted ALL posts of that user are deleted as well
+
+
+RSpec
+
+1. Delete <ProjectName>/test/
